@@ -32,4 +32,13 @@ describe("UI Test", () => {
       .uncheck(["checkbox1", "checkbox3"])
       .should("not.be.checked");
   });
+  it("should check the radio button", () => {
+    cy.get('.action-radios [type="radio"]')
+      .check("radio1")
+      .should("be.checked")
+      .should("be.visible");
+    cy.get('.action-radios [type="radio"]')
+      .check("radio3", { force: true })
+      .should("be.disabled");
+  });
 });
