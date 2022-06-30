@@ -41,4 +41,18 @@ describe("UI Test", () => {
       .check("radio3", { force: true })
       .should("be.disabled");
   });
+  it("should select the first option from dropdown", () => {
+    // at first, no option should be selected
+    cy.get(".action-select").should("have.value", "--Select a fruit--");
+    // confirm the apples were selected
+    cy.get(".action-select").select("apples").should("contain", "apples");
+    // selecting multiple values
+    cy.get(".action-select-multiple")
+      .select(["apples", "oranges", "bananas"])
+      .invoke("val")
+      .should("have.length", 3);
+    cy.get(".action-select-multiple")
+      .invoke("val")
+      .should("include", "fr-oranges");
+  });
 });

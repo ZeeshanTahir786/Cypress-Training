@@ -11,4 +11,5 @@ module.exports = defineConfig({
       navBarText: "cypress.io",
     },
   },
+  chromeWebSecurity: false,
 });
