@@ -30,4 +30,38 @@ describe("Name of the group", () => {
         });
     });
   });
+  it("intercept the jsonPlaceHolder api", () => {
+    cy.visit("https://jsonplaceholder.typicode.com");
+    cy.intercept({
+      path: "/posts",
+    })
+      .as("posts")
+      .then((res) => {
+        cy.log(JSON.stringify(res));
+        console.log(JSON.stringify(res));
+      });
+    cy.get("table:nth-of-type(1) a[href='/posts']").click();
+
+    cy.wait("@posts").then((res) => {
+      cy.log(res?.response?.body);
+      console.log(JSON.stringify(res));
+      expect(res?.response?.body).to.have.length(100);
+    });
+  });
+  it("should intercept with stubbing static resposne", () => {
+    cy.visit("https://jsonplaceholder.typicode.com");
+    cy.intercept("GET", "/posts", {
+      total_posts: 5,
+    }).as("posts");
+    cy.get("table:nth-of-type(1) a[href='/posts']").click();
+    cy.wait("@posts");
+  });
+  it.only("should intercept with stubbing dynamic resposne", () => {
+    cy.visit("https://jsonplaceholder.typicode.com");
+    cy.intercept("GET", "/posts", {
+      fixture: "example.json",
+    }).as("posts");
+    cy.get("table:nth-of-type(1) a[href='/posts']").click();
+    cy.wait("@posts");
+  });
 });
